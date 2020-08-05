@@ -48,9 +48,13 @@ def get_stats() -> str:
         sys.exit(1)
 
     data_list = []
+    top_lang = lang_data[:5]
     try:
-        top_lang = lang_data[:5]
-        if 'Other' in top_lang: top_lang.append(lang_data[5])
+        filter_lang = [i['name'] for i in top_lang]
+        if 'Other' in filter_lang:
+            idx = filter_lang.index('Other')
+            top_lang = lang_data[:idx]
+            top_lang.extend(lang_data[idx+1:6])
         pad = len(max([l['name'] for l in top_lang], key=len))
     except ValueError:
         print("The Data seems to be empty. Please wait for a day for the data to be filled in.")
