@@ -49,11 +49,13 @@ def get_stats() -> str:
 
     data_list = []
     try:
-        pad = len(max([l['name'] for l in lang_data[:5]], key=len))
+        top_lang = lang_data[:5]
+        if 'Other' in top_lang: top_lang.append(lang_data[5])
+        pad = len(max([l['name'] for l in top_lang], key=len))
     except ValueError:
         print("The Data seems to be empty. Please wait for a day for the data to be filled in.")
         return '```text\nNo Activity tracked this Week\n```'
-    for lang in lang_data[:5]:
+    for lang in top_lang:
         lth = len(lang['name'])
         ln_text = len(lang['text'])
         # following line provides a neat finish
