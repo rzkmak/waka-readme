@@ -24,9 +24,8 @@ commit_message = os.getenv("INPUT_COMMIT_MESSAGE")
 def this_week() -> str:
     '''Returns a week streak'''
     week_end = datetime.datetime.today() - datetime.timedelta(days=1)
-    week_start = week_end - datetime.timedelta(days=7)
-    print("Week header created")
-    return f"Week: {week_start.strftime('%d %B, %Y')} - {week_end.strftime('%d %B, %Y')}"
+    week_start = week_end - datetime.timedelta(days=365)
+    return f"Yearly: {week_start.strftime('%d %B, %Y')} - {week_end.strftime('%d %B, %Y')}"
 
 
 def make_graph(percent: float) -> str:
@@ -43,7 +42,7 @@ def make_graph(percent: float) -> str:
 def get_stats() -> str:
     '''Gets API data and returns markdown progress'''
     data = requests.get(
-        f"https://wakatime.com/api/v1/users/current/stats/last_7_days?api_key={waka_key}").json()
+        f"https://wakatime.com/api/v1/users/current/stats/last_year?api_key={waka_key}").json()
     try:
         lang_data = data['data']['languages']
     except KeyError:
