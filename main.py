@@ -21,13 +21,6 @@ show_title = os.getenv("INPUT_SHOW_TITLE")
 commit_message = os.getenv("INPUT_COMMIT_MESSAGE")
 
 
-def this_week() -> str:
-    '''Returns a week streak'''
-    week_end = datetime.datetime.today() - datetime.timedelta(days=1)
-    week_start = week_end - datetime.timedelta(days=365)
-    return f"Yearly: {week_start.strftime('%d %B, %Y')} - {week_end.strftime('%d %B, %Y')}"
-
-
 def make_graph(percent: float) -> str:
     '''Make progress graph from API graph'''
     blocks = "░▒▓█"
@@ -42,7 +35,7 @@ def make_graph(percent: float) -> str:
 def get_stats() -> str:
     '''Gets API data and returns markdown progress'''
     data = requests.get(
-        f"https://wakatime.com/api/v1/users/current/stats/last_year?api_key={waka_key}").json()
+        f"https://wakatime.com/api/v1/users/current/stats/all_time?api_key={waka_key}").json()
     try:
         lang_data = data['data']['languages']
     except KeyError:
@@ -64,12 +57,7 @@ def get_stats() -> str:
             f"{lang['name']}{' '*(pad + 3 - lth)}{lang['text']}{' '*(16 - ln_text)}{make_graph(lang['percent'])}   {fmt_percent} % ")
     print("Graph Generated")
     data = '\n'.join(data_list)
-    if show_title == 'true':
-        print("Stats with Weeks in Title Generated")
-        return '```text\n'+this_week()+'\n\n'+data+'\n```'
-    else:
-        print("Usual Stats Generated")
-        return '```text\n'+data+'\n```'
+    return '```text\n'+data+'\n```'
 
 
 def decode_readme(data: str) -> str:
